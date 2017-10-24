@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\n#install.packages(\"npspec_0.1.0.tar.gz\", repos = NULL, type = \"source\" )\n#library(\"npspec\")\n#library(\"viridis\")\ndevtools::load_all(\".\")\n\nimplot <- fields::image.plot\n\n\nlibrary(\"npspec\")\nlibrary(\"viridis\")\n\nimplot <- fields::image.plot\n\n\ntmpr <- R.matlab::readMat(\"datasets/challenge_tempsdata.mat\")[[1]]\nn1 <- nrow(tmpr)\nn2 <- ncol(tmpr)\nnvec_obs <- c(200,200)\n\ny <- tmpr[1:nvec_obs[1],1:nvec_obs[2]]\nobserved <- !is.na(y)\n\nlocs <- as.matrix( expand.grid( 1:nvec_obs[1], 1:nvec_obs[2] ) )\nlm1 <- lm( y[1:prod(nvec_obs)] ~ locs[,1] + locs[,2] )\n\ny0 <- array( NA, nvec_obs )\ny0[observed] <- lm1$residuals\n\n\ncolpal <- magma(64)\npar(mfrow=c(1,2))\nimplot(tmpr,col=colpal)\nimplot(y0[1:nvec_obs[1],1:nvec_obs[2]],col=colpal)\n\n\nt1 <- proc.time()\nfit <- iterate_spec(y0, observed, burn_iters = 50, par_spec_fun = spec_AR1, embed_fac = 1.2,\n                    kern_parm = 0.04, precond_method = \"Vecchia\", m = 10,\n                    silent = FALSE)\n(proc.time() - t1)/60\n\nimplot(log(fit$spec))\nfit$cov[1,1]\nfit$loglik\n\n\n#pdf(\"datachallenge_condsim.pdf\",width=8,height=4)\npar(mfrow=c(1,2),mar=c(1,1,3,5))\nzlimits <- max(abs(fit$condsims[,,1]))*c(-1,1)\nimplot(y0[1:n1,1:n2],zlim=zlimits,axes=FALSE,main=\"Original Data\",col=colpal)\nbox()\nimplot(fit$condsim[1:n1,1:n2,1],zlim=zlimits,axes=FALSE,main=\"Conditional Simulation\",col=colpal)\nbox()\n#dev.off()\n\n#pdf(\"datachallenge_condsim.pdf\",width=8,height=4)\nsdmap <- apply( fit$condsim, c(1,2), sd )\nmeanmap <- apply( fit$condsim, c(1,2), mean )\npar(mfrow=c(1,2),mar=c(1,1,3,5))\nzlimits <- max(abs(fit$condsim))*c(-1,1) + meantmpr\nimplot(meanmap[1:n1,1:n2]+meantmpr,zlim=zlimits,axes=FALSE,main=\"Conditional Mean\")\nbox()\nimplot(sqrt(sdmap[1:n1,1:n2]), axes=FALSE, main = \"Conditional Standard Deviation\")\nbox()\n#dev.off()\n\n",
+    "created" : 1507231728454.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2626490295",
+    "id" : "3B740F8",
+    "lastKnownWriteTime" : 1507926108,
+    "last_content_update" : 1507926108987,
+    "path" : "~/Dropbox/research/npspecden/code/npspec/vignettes/surface_temp_vignette.R",
+    "project_path" : "vignettes/surface_temp_vignette.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

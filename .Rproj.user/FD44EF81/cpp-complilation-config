@@ -1,0 +1,19 @@
+{
+    "args" : [
+        "-I/Applications/AddOns/RStudio.app/Contents/Resources/resources/libclang/builtin-headers/3.5",
+        "-I/Applications/AddOns/RStudio.app/Contents/Resources/resources/libclang/builtin-headers/libc++/3.5",
+        "-I/Users/guinness/Library/R/3.3/library/Rcpp/include",
+        "-I/Library/Frameworks/R.framework/Resources/include",
+        "-DNDEBUG",
+        "-I/Users/Shared/Jenkins/workspace/External-R-3.3.3/vendor/build/include",
+        "-DU_STATIC_IMPLEMENTATION",
+        "-I/opt/X11/include",
+        "-fPIC",
+        "-I/Users/Shared/Jenkins/workspace/External-R-3.3.3/vendor/build/include",
+        "-DU_STATIC_IMPLEMENTATIN",
+        "-I/opt/X11/include"
+    ],
+    "hash" : "1506451945",
+    "is_cpp" : true,
+    "pch" : "Rcpp"
+}

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\n#' @export\nsqexp_kern <- function( r, nvec ){\n\n    # r is a range parameter\n    # larger r gives stronger smoothing\n\n    v1 <- as.matrix( c( seq( 0, ceiling((nvec[1]-1)/2) ),\n                        seq( floor((nvec[1]-1)/2), 1, by = -1 ) ) )/nvec[1]\n    v2 <- as.matrix( c( seq( 0, ceiling((nvec[2]-1)/2) ),\n                        seq( floor((nvec[2]-1)/2), 1, by = -1 ) ) )/nvec[2]\n\n    v1arr <-    v1[,rep(1,nvec[2])]\n    v2arr <- t( v2[,rep(1,nvec[1])] )\n\n    kern <- exp( -(v1arr^2 + v2arr^2)/r^2 )\n    kern <- kern/sum(kern)\n    return(kern)\n\n}\n\n#' @export\nsmooth_pgram <- function(pgram,kern){\n\n    n <- prod(dim(pgram))\n    smpgram <- Re(1/n*fft( fft(pgram)*fft(kern), inverse = TRUE ))\n    return(smpgram)\n\n}\n\n\n\n\n\n",
+    "created" : 1507925659746.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "99464117",
+    "id" : "D6F33612",
+    "lastKnownWriteTime" : 1507925728,
+    "last_content_update" : 1507925728977,
+    "path" : "~/Dropbox/research/npspecden/code/npspec/R/kernfuns.R",
+    "project_path" : "R/kernfuns.R",
+    "properties" : {
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
