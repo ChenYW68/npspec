@@ -7,7 +7,7 @@ library("viridis")
 implot <- fields::image.plot
 
 # read in land surface temperature data
-load("datasets/AllSatelliteTemps.RData")
+load("../datasets/AllSatelliteTemps.RData")
 tmpr <- matrix( all.sat.temps$MaskTemp, 500, 300 )
 
 
