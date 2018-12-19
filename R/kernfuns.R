@@ -20,10 +20,18 @@ sqexp_kern <- function( r, nvec ){
 }
 
 #' @export
-smooth_pgram <- function(pgram,kern){
+smooth_pgram <- function(pgram,kern, smoothlog = FALSE){
 
     n <- prod(dim(pgram))
-    smpgram <- Re(1/n*fft( fft(pgram)*fft(kern), inverse = TRUE ))
+    if( !smoothlog ){
+        smpgram <- Re(1/n*fft( fft(pgram)*fft(kern), inverse = TRUE ))
+    } else if( smoothlog ){
+        sumpgram <- sum(pgram)
+        logpgram <- log(pgram)
+        logsmpgram <- Re(1/n*fft( fft(logpgram)*fft(kern), inverse = TRUE ))
+        smpgram <- exp(logsmpgram)
+        smpgram <- sumpgram*smpgram/sum(smpgram)
+    }
     return(smpgram)
 
 }

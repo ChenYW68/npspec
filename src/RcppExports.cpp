@@ -5,16 +5,6 @@
 
 using namespace Rcpp;
 
-// rcpp_hello
-List rcpp_hello();
-RcppExport SEXP _npspec_rcpp_hello() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello());
-    return rcpp_result_gen;
-END_RCPP
-}
 // LinvMult
 NumericVector LinvMult(NumericMatrix covarray, NumericVector y, NumericMatrix locs, IntegerMatrix NNarray);
 RcppExport SEXP _npspec_LinvMult(SEXP covarraySEXP, SEXP ySEXP, SEXP locsSEXP, SEXP NNarraySEXP) {
@@ -125,7 +115,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_npspec_rcpp_hello", (DL_FUNC) &_npspec_rcpp_hello, 0},
     {"_npspec_LinvMult", (DL_FUNC) &_npspec_LinvMult, 4},
     {"_npspec_LinvTransMult", (DL_FUNC) &_npspec_LinvTransMult, 4},
     {"_npspec_vecchiaPrecond", (DL_FUNC) &_npspec_vecchiaPrecond, 4},

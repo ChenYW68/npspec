@@ -67,11 +67,26 @@ spec_AR1 <- function(parm,nvec){
 }
 
 
+#' @export
+spec_qmatern <- function( covparms, nvec ){
 
+    # compute sine functions
+    n1 <- nvec[1]
+    n2 <- nvec[2]
+    n <- n1*n2
+    w1 <- (0:(n1-1))*2*pi/n1
+    w2 <- (0:(n2-1))*2*pi/n2
+    s1 <- matrix(sin(w1/2))
+    s2 <- matrix(sin(w2/2))
+    s1mat <-   s1[,rep(1,n2)]
+    s2mat <- t(s2[,rep(1,n1)])
 
-
-
-
-
-
-
+    #
+    a1 <- covparms[1]
+    sm <- covparms[2]
+    con <- 1
+    d   <- con +  a1^2*s1mat^2 + a1^2*s2mat^2
+    s <- d^(-sm-1)
+    s <- n*s/sum(s)
+    return(s)
+}

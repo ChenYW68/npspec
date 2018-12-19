@@ -1,6 +1,6 @@
 
 #' @export
-iterate_spec <- function(y, observed, X = NULL, embed_fac = 1.2, burn_iters = 100, par_spec_fun = spec_AR1,
+iterate_spec_not_periodic <- function(y, observed, X = NULL, embed_fac = 1.2, burn_iters = 100, par_spec_fun = spec_AR1,
                                  kern_parm = 2*pi/sqrt(sum(observed)), precond_method = "fft", m = 10,
                                  silent = TRUE, max_iter = 200, tol = 1e-6,
                                  converge_tol = 0.05,
@@ -19,21 +19,35 @@ iterate_spec <- function(y, observed, X = NULL, embed_fac = 1.2, burn_iters = 10
 
     # create embedded lattice
     nvec_obs <- dim(y)
-    nvec <- round( nvec_obs*embed_fac )
-    y_embed <- array(NA,nvec)
+
+    nvec  <- round( nvec_obs*embed_fac )
+    nvec_double <- 2*round( nvec_obs*embed_fac )
+
+    onearray <- array(1,nvec)
+    odds1 <- 2*(1:nvec[1])-1
+    odds2 <- 2*(1:nvec[2])-1
+    onearray_double <- array(0,nvec_double)
+    onearray_double[odds1,odds2] <- onearray
+
+
+
+    y_embed <- array(NA,nvec_double)
     y_embed[1:nvec_obs[1],1:nvec_obs[2]] <- y
-    observed_embed <- array(FALSE,nvec)
+    observed_embed <- array(FALSE,nvec_double)
     observed_embed[1:nvec_obs[1],1:nvec_obs[2]] <- observed
 
     # get setup for vecchia's approximation
-    locsfull <- expand.grid( 1:nvec[1], 1:nvec[2] )
+    locsfull <- expand.grid( 1:nvec_double[1], 1:nvec_double[2] )
     locs <- locsfull[observed_embed,]
     NNarray <- findOrderedNN_kdtree(locs,m)
     NNarray[m+1,] <- (m+1):1 # need to make sure first part goes in the right order
 
-    # get grid size and define kernel
+    # get grid size and define kerenel
     n <- prod(nvec)
     kern <- sqexp_kern(kern_parm, nvec)
+    kern2 <- sqexp_kern(0.01, nvec_double)
+    normarray_double <- smooth_pgram( onearray_double, kern2, smoothlog = FALSE )
+
 
     # do least squares to get initial estimate of mean
     if( !is.null(X) ){
@@ -80,7 +94,8 @@ iterate_spec <- function(y, observed, X = NULL, embed_fac = 1.2, burn_iters = 10
     for(k in 1:burn_iters){
 
         # periodogram
-        pgram <- 1/n*abs( fft(y0) )^2
+        # take periodogram over embedded area, but not double embedded area
+        pgram <- 1/n*abs( fft(y0[1:nvec[1],1:nvec[2]]) )^2
         # do the optimization
         if(do_parametric_filter){
             res <- optim(logitpar,likfun,method="Brent",lower=-6,upper=6)
@@ -95,6 +110,14 @@ iterate_spec <- function(y, observed, X = NULL, embed_fac = 1.2, burn_iters = 10
         sm_pgram <- smooth_pgram(pgram/param_spec,kern, smoothlog = FALSE)
         # estimate is product of smoothed ratio and parametric spec
         spec <- sm_pgram*param_spec
+
+        # this is different for not periodic case!
+        # we need to interpolate spectrum in order
+        # to impute non-periodically on nvec_embed
+        spec_double <- array(0,nvec_double)
+        spec_double[odds1,odds2] <- spec
+        spec_double <- smooth_pgram( spec_double, kern2, smoothlog = FALSE )/normarray_double
+
 
         # every 10th iteration, re-estimate the mean
         if( k %% 10 == 0 ){
@@ -115,13 +138,13 @@ iterate_spec <- function(y, observed, X = NULL, embed_fac = 1.2, burn_iters = 10
         }
 
         # do a conditional simulation with the new spectrum
-        y0 <- condsim_spec(y = y0, spec = spec, obs = observed_embed, silent = silent, maxit = 500, precondmethod = precond_method, NNarray = NNarray, tol = tol)
+        y0 <- condsim_spec(y = y0, spec = spec_double, obs = observed_embed, silent = silent, maxit = 500, precondmethod = precond_method, NNarray = NNarray, tol = tol)
     }
 
     spec_old <- spec
 
     for(k in 1:max_iter){
-        pgram <- 1/n*abs( fft(y0) )^2
+        pgram <- 1/n*abs( fft(y0[1:nvec[1],1:nvec[2]]) )^2
         # do the optimization
         if(do_parametric_filter){
             res <- optim(logitpar,likfun,method="Brent",lower=-6,upper=6)
@@ -136,8 +159,18 @@ iterate_spec <- function(y, observed, X = NULL, embed_fac = 1.2, burn_iters = 10
         sm_pgram <- smooth_pgram(pgram/param_spec,kern, smoothlog = FALSE)
         # estimate is product of smoothed ratio and parametric spec
         spec <- sm_pgram*param_spec
+
         # update the spectrum estimate
         spec_new <- (k-1)/k*spec_old + 1/k*spec
+
+        # this is different for not periodic case!
+        # we need to interpolate spectrum in order
+        # to impute non-periodically on nvec_embed
+        spec_double <- array(0,nvec_double)
+        spec_double[odds1,odds2] <- spec_new
+        spec_double <- smooth_pgram( spec_double, kern2, smoothlog = FALSE )/normarray_double
+
+
         # compare difference to tolerance
         spec_sd <- sqrt( smooth_pgram( spec_old^2, kern^2 ) )
 
@@ -166,38 +199,39 @@ iterate_spec <- function(y, observed, X = NULL, embed_fac = 1.2, burn_iters = 10
         }
 
         spec_old <- spec_new
-        y0 <- condsim_spec(y = y0, spec = spec_new, obs = observed_embed, silent = silent, maxit = 500, precondmethod = precond_method, NNarray = NNarray, tol = tol)
+        y0 <- condsim_spec(y = y0, spec = spec_double, obs = observed_embed, silent = silent, maxit = 500, precondmethod = precond_method, NNarray = NNarray, tol = tol)
 
     }
     avg_spec <- spec_new
 
     # get estimate of the likelihood
     #cat("Computing estimate of likelihood \n")
-    locsfull <- as.matrix( expand.grid( 1:nvec[1], 1:nvec[2] ) )
-    locs <- locsfull[observed_embed,]
-    NNarray <- findOrderedNN_kdtree(locs,40)
-    covarray <- 1/prod(dim(avg_spec))*Re( fft( avg_spec, inverse = TRUE ) )
-    yvec <- y_embed[observed_embed]
-    loglik <- vecchiaLik(covarray,yvec,locs,NNarray)
+    #locsfull <- as.matrix( expand.grid( 1:nvec[1], 1:nvec[2] ) )
+    #locs <- locsfull[observed_embed,]
+    #NNarray <- findOrderedNN_kdtree(locs,40)
+    #covarray <- 1/prod(dim(avg_spec))*Re( fft( avg_spec, inverse = TRUE ) )
+    #yvec <- y_embed[observed_embed]
+    #loglik <- vecchiaLik(covarray,yvec,locs,NNarray)
 
     # get conditional expectation
     #cat("Computing Conditional Simulations \n")
-    condexp <- condexp_spec(y0,avg_spec,observed_embed, silent=silent,
-        maxit=500,precondmethod = precond_method, NNarray = NNarray) +
-        mumat
+    #condexp <- condexp_spec(y0,avg_spec,observed_embed, silent=silent,
+    #    maxit=500,precondmethod = precond_method, NNarray = NNarray) +
+    #    mumat
 
     # get conditional simulations
-    condsim_array <- array( NA, c(nvec_obs,ncondsim) )
+    #condsim_array <- array( NA, c(nvec_obs,ncondsim) )
     #condsim_array <- array( NA, c(nvec,ncondsim) )
-    for(j in 1:ncondsim){
-        cursim <- condsim_spec(y0,avg_spec,observed_embed,silent=silent,
-            precondmethod=precond_method,NNarray=NNarray) +
-            mumat
-        condsim_array[,,j] <- cursim[1:nvec_obs[1],1:nvec_obs[2]]
+    #for(j in 1:ncondsim){
+    #    cursim <- condsim_spec(y0,avg_spec,observed_embed,silent=silent,
+    #        precondmethod=precond_method,NNarray=NNarray) +
+    #        mumat
+    #    condsim_array[,,j] <- cursim[1:nvec_obs[1],1:nvec_obs[2]]
         #condsim_array[,,j] <- cursim
-    }
+    #}
 
-    return(list( spec = avg_spec, cov = covarray, loglik = loglik,
-        condexp = condexp[1:nvec_obs[1],1:nvec_obs[2]], condsim = condsim_array,
-        betahat = betahat, mumat = mumat[1:nvec_obs[1],1:nvec_obs[2]], betacov = solve(infomat)) )
+    return(list( spec = avg_spec ))
+    #, cov = covarray, loglik = loglik,
+    #    condexp = condexp[1:nvec_obs[1],1:nvec_obs[2]], condsim = condsim_array,
+    #    betahat = betahat, mumat = mumat[1:nvec_obs[1],1:nvec_obs[2]], betacov = solve(infomat)) )
 }

@@ -3,6 +3,84 @@
         "definitions" : [
             {
                 "column" : 15,
+                "file" : "/Users/guinness/Dropbox/research/npspec/src/vecchia_precond.cpp",
+                "kind" : 6,
+                "line" : 12,
+                "name" : "LinvMult(NumericMatrix, NumericVector, NumericMatrix, IntegerMatrix)",
+                "parent_name" : "",
+                "usr" : "c:@F@LinvMult#$@N@Rcpp@C@Matrix>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#$@N@Rcpp@C@Vector>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#S0_#$@N@Rcpp@C@Matrix>#VI13#@N@Rcpp@CT>1#T@PreserveStorage#"
+            },
+            {
+                "column" : 15,
+                "file" : "/Users/guinness/Dropbox/research/npspec/src/vecchia_precond.cpp",
+                "kind" : 6,
+                "line" : 131,
+                "name" : "LinvTransMult(NumericMatrix, NumericVector, NumericMatrix, IntegerMatrix)",
+                "parent_name" : "",
+                "usr" : "c:@F@LinvTransMult#$@N@Rcpp@C@Matrix>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#$@N@Rcpp@C@Vector>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#S0_#$@N@Rcpp@C@Matrix>#VI13#@N@Rcpp@CT>1#T@PreserveStorage#"
+            },
+            {
+                "column" : 15,
+                "file" : "/Users/guinness/Dropbox/research/npspec/src/vecchia_precond.cpp",
+                "kind" : 6,
+                "line" : 241,
+                "name" : "vecchiaPrecond(NumericMatrix, NumericVector, NumericMatrix, IntegerMatrix)",
+                "parent_name" : "",
+                "usr" : "c:@F@vecchiaPrecond#$@N@Rcpp@C@Matrix>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#$@N@Rcpp@C@Vector>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#S0_#$@N@Rcpp@C@Matrix>#VI13#@N@Rcpp@CT>1#T@PreserveStorage#"
+            },
+            {
+                "column" : 15,
+                "file" : "/Users/guinness/Dropbox/research/npspec/src/vecchia_precond.cpp",
+                "kind" : 6,
+                "line" : 257,
+                "name" : "getLinvEntries(NumericMatrix, NumericMatrix, IntegerMatrix)",
+                "parent_name" : "",
+                "usr" : "c:@F@getLinvEntries#$@N@Rcpp@C@Matrix>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#S0_#$@N@Rcpp@C@Matrix>#VI13#@N@Rcpp@CT>1#T@PreserveStorage#"
+            },
+            {
+                "column" : 15,
+                "file" : "/Users/guinness/Dropbox/research/npspec/src/vecchia_precond.cpp",
+                "kind" : 6,
+                "line" : 367,
+                "name" : "LinvTransMultFromEntries(NumericMatrix, NumericVector, IntegerMatrix)",
+                "parent_name" : "",
+                "usr" : "c:@F@LinvTransMultFromEntries#$@N@Rcpp@C@Matrix>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#$@N@Rcpp@C@Vector>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#$@N@Rcpp@C@Matrix>#VI13#@N@Rcpp@CT>1#T@PreserveStorage#"
+            },
+            {
+                "column" : 15,
+                "file" : "/Users/guinness/Dropbox/research/npspec/src/vecchia_precond.cpp",
+                "kind" : 6,
+                "line" : 401,
+                "name" : "LinvMultFromEntries(NumericMatrix, NumericVector, IntegerMatrix)",
+                "parent_name" : "",
+                "usr" : "c:@F@LinvMultFromEntries#$@N@Rcpp@C@Matrix>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#$@N@Rcpp@C@Vector>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#$@N@Rcpp@C@Matrix>#VI13#@N@Rcpp@CT>1#T@PreserveStorage#"
+            },
+            {
+                "column" : 15,
+                "file" : "/Users/guinness/Dropbox/research/npspec/src/vecchia_precond.cpp",
+                "kind" : 6,
+                "line" : 438,
+                "name" : "vecchiaPrecondFromEntries(NumericMatrix, NumericVector, IntegerMatrix)",
+                "parent_name" : "",
+                "usr" : "c:@F@vecchiaPrecondFromEntries#$@N@Rcpp@C@Matrix>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#$@N@Rcpp@C@Vector>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#$@N@Rcpp@C@Matrix>#VI13#@N@Rcpp@CT>1#T@PreserveStorage#"
+            },
+            {
+                "column" : 15,
+                "file" : "/Users/guinness/Dropbox/research/npspec/src/vecchia_precond.cpp",
+                "kind" : 6,
+                "line" : 454,
+                "name" : "vecchiaLik(NumericMatrix, NumericVector, NumericMatrix, IntegerMatrix)",
+                "parent_name" : "",
+                "usr" : "c:@F@vecchiaLik#$@N@Rcpp@C@Matrix>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#$@N@Rcpp@C@Vector>#VI14#@N@Rcpp@CT>1#T@PreserveStorage#S0_#$@N@Rcpp@C@Matrix>#VI13#@N@Rcpp@CT>1#T@PreserveStorage#"
+            }
+        ],
+        "file" : "/Users/guinness/Dropbox/research/npspec/src/vecchia_precond.cpp",
+        "file_last_write" : 1507827857
+    },
+    {
+        "definitions" : [
+            {
+                "column" : 15,
                 "file" : "/Users/guinness/Dropbox/research/npspecden/code/npspec/src/vecchia_precond.cpp",
                 "kind" : 6,
                 "line" : 12,
