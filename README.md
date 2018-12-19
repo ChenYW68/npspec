@@ -9,5 +9,6 @@ Then install npspec with
 ```R
 devtools::install_github("joeguinness/npspec")
 ```
+There is a description of the main package functions here
 
-There is a vignette demonstrating how the methods can be applied to a large spatial dataset consisting of land surface temperatures.
+[Spectral Density Estimation for Random Fields via Periodic Embeddings](https://arxiv.org/abs/1710.08978) . 
