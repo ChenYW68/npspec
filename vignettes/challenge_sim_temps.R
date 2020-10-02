@@ -43,8 +43,9 @@ predvar_mat <- apply( cond_diff, c(1,2), meansq )
 predvar_vec <- c(predvar_mat)
 
 # plots
-par(mfrow=c(1,2))
+par(mfrow=c(2,2))
 fields::image.plot(pred_mat)
 fields::image.plot(predvar_mat)
+fields::image.plot(tmpr)
 
 

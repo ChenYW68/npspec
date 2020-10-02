@@ -1,9 +1,21 @@
-
+# specfun <- function (parm, nvec){
+#     n <- prod(nvec)
+#     filter0 <- array(0, nvec)
+#     filter0[1, 1] = 1
+#     filter0[1, 2] = -parm
+#     filter0[2, 1] = -parm
+#     filter0[nvec[1], 1] = -parm
+#     filter0[1, nvec[2]] = -parm
+#     fftfilter <- fft(filter0)
+#     spec <- 1/(abs(fftfilter)^2)
+#     spec <- n * spec/sum(spec)
+#     return(spec)
+# }
 
 whittle_lik <- function(pgram,parms,specfun){
 
     nvec <- dim(pgram)
-    spec <- specfun(parms,nvec)
+    spec <- specfun(parms,nvec)   # i.e. spec_AR1
     loglik <- -prod(nvec)/2*log(2*pi)-sum(log(spec)) - sum(pgram/spec)
     return(loglik)
 }

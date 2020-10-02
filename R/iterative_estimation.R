@@ -1,10 +1,13 @@
 
 #' @export
-iterate_spec <- function(y, observed, X = NULL, embed_fac = 1.2, burn_iters = 100, par_spec_fun = spec_AR1,
-                                 kern_parm = 2*pi/sqrt(sum(observed)), precond_method = "fft", m = 10,
-                                 silent = TRUE, max_iter = 200, tol = 1e-6,
-                                 converge_tol = 0.05,
-                                 ncondsim = 1){
+iterate_spec <- function(y, observed, X = NULL,
+                         embed_fac = 1.2, burn_iters = 100,
+                         par_spec_fun = spec_AR1,
+                         kern_parm = 2*pi/sqrt(sum(observed)),
+                         precond_method = "fft", m = 10,
+                         silent = TRUE, max_iter = 200, tol = 1e-6,
+                         converge_tol = 0.05,
+                         ncondsim = 1){
 
     if(identical(par_spec_fun,FALSE)){
         do_parametric_filter <- FALSE
@@ -28,7 +31,7 @@ iterate_spec <- function(y, observed, X = NULL, embed_fac = 1.2, burn_iters = 10
     # get setup for vecchia's approximation
     locsfull <- expand.grid( 1:nvec[1], 1:nvec[2] )
     locs <- locsfull[observed_embed,]
-    NNarray <- findOrderedNN_kdtree(locs,m)
+    NNarray <- findOrderedNN_kdtree(locs, m)
     NNarray[m+1,] <- (m+1):1 # need to make sure first part goes in the right order
 
     # get grid size and define kernel

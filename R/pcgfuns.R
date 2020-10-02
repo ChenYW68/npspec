@@ -1,6 +1,7 @@
 
 #' @export
-pcg_spec <- function( y, spec, obs, precondmethod = "fft", maxit = 500, tol = 1e-6, silent = FALSE, NNarray = NULL ){
+pcg_spec <- function( y, spec, obs, precondmethod = "fft",
+    maxit = 500, tol = 1e-6, silent = FALSE, NNarray = NULL ){
 
     nvec <- dim(spec)
 
