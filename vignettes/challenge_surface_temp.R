@@ -26,7 +26,9 @@ X[,,3] <- array( locs[,2], nvec_obs)
 # fit the model
 t1 <- proc.time()
 fit <- iterate_spec(y,
-        observed, X = X, burn_iters = 20, par_spec_fun = spec_AR1, embed_fac = 1.2,
+        observed, X = X, burn_iters = 20,
+        par_spec_fun = spec_AR1,
+        embed_fac = 1.2,
         precond_method = "Vecchia", m = 10,
         silent = TRUE, ncondsim = 50)
 (proc.time() - t1)/60
