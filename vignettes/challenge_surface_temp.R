@@ -3,7 +3,7 @@
 library("npspec")
 
 # read in land surface temperature data and put in a matrix
-load("../datasets/AllSatelliteTemps.RData")
+load("./datasets/AllSatelliteTemps.RData")
 tmpr <- matrix( all.sat.temps$MaskTemp, 500, 300 )
 
 # get grid size
